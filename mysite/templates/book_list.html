@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  {% block content_header %}
+    <h2>Заявки на приобретение билетов</h2>
+    <p>
+      <a href="{% url 'upload_book' %}" class="btn btn-primary">Создать заявку</a>
+    </p>
+  {% endblock %}
+
+  <table class="table mb-0">
+    <thead>
+      <tr>
+          <th>-</th>
+          <th>Номер</th>
+          <th>Дата</th>
+          <th>Сотрудник</th>
+          <th>Статус</th>
+
+          <th>Comment</th>
+          <th>-</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for order in orders %}
+        {% if user == order.user or user.is_staff or user.is_superuser %}
+        <tr>|
+            <td><a href="{% url 'order_detailview' order.pk %}">edit</a></td>
+            <td><b>{{ order.id|stringformat:'06d'}}</b></td>
+            <td><b>{{ order.created|date:"d/m/Y" }}</b></td>
+            <td><b>{{ order.customer }}</b></td>
+
+            {% if order.status == 1 %}
+            <td><b>новый</b></td>
+                {% elif order.status == 2 %}
+            <td><b>в работе</b></td>
+                {% elif order.status == 3 %}
+            <td><b>выполнен</b></td>
+                {% elif order.status == 4 %}
+            <td><b>отменен</b></td>
+            {% endif %}
+
+            <td>{{ order.comment }}</td>
+            <td>
+{#            <td><a href="{% url 'create_trips' order.pk %}">добавить поездку</a></td>#}
+
+            <td>
+            <form method="post" action="{% url 'create_trips' order.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary btn-sm">добавить поездку</button>
+            </form>
+          </td>
+          <td>
+            <form method="post" action="{% url 'delete_book' order.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </td>
+
+        </tr>
+          {% for tripinorder in order.tripinorder_set.all %}
+              <tr>
+                  <td><a href="{% url 'ticket_detailview' tripinorder.pk %}">edit</a></td>
+
+              <td>{{ tripinorder.pk|stringformat:'06d' }}</td>
+                  <td>{{ tripinorder.date_of_trip|date:"d/m/Y" }}</td>
+            <td>{{ tripinorder.departure}}  -->  {{tripinorder.arrival}}</td>
+
+                  {% if tripinorder.status == 1 %}
+            <td><b>новый</b></td>
+                {% elif tripinorder.status == 2 %}
+            <td><b>в работе</b></td>
+                {% elif tripinorder.status == 3 %}
+            <td><b>выполнен</b></td>
+                {% elif tripinorder.status == 4 %}
+            <td><b>отменен</b></td>
+            {% endif %}
+
+{#                  <td>{{ tripinorder.time_of_trip }}</td>#}
+            <td></td>
+                  <td></td>
+            <td>
+                {% if tripinorder.pdf %}
+            <a href="{{ tripinorder.pdf.url }}" class="btn btn-primary btn-sm" target="_blank">
+              Скачать билет
+            </a>
+                    {% else %}
+                    <p>-</p>
+                {% endif %}
+            </td>
+              <td>
+            <form method="post" action="{% url 'delete_trip' tripinorder.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </td>
+              </tr>
+        {% endfor %}
+
+        {% endif %}
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock %}

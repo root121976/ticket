@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Домашняя страница</h2>
+  <p>Добро пожаловать в сервис заказа поездок, {% if user.is_authenticated %}{{ user.username }}{% else %}гость{% endif %}!</p>
+  <p>
+    <strong>Общее число заявок: </strong> {{ count }}
+  </p>
+{% endblock %}
