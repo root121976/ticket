@@ -43,14 +43,14 @@
 
             <td>{{ order.comment }}</td>
             <td>
-{#            <td><a href="{% url 'create_trips' order.pk %}">добавить поездку</a></td>#}
+            <td><a href="{% url 'create_trips' order.pk %}">добавить поездку</a></td>
 
-            <td>
-            <form method="post" action="{% url 'create_trips' order.pk %}">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-primary btn-sm">добавить поездку</button>
-            </form>
-          </td>
+{#            <td>#}
+<!--            <form method="post" action="{% url 'create_trips' order.pk %}">-->
+<!--              {% csrf_token %}-->
+<!--              <button type="submit" class="btn btn-primary btn-sm">добавить поездку</button>-->
+<!--            </form>-->
+{#          </td>#}
           <td>
             <form method="post" action="{% url 'delete_book' order.pk %}">
               {% csrf_token %}

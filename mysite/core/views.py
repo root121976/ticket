@@ -119,7 +119,7 @@ def create_trips(request, pk):
             return redirect('book_list')
 
     else:
-        form = TripInOrderForm(request.POST, request.FILES, initial={'order': order})
+        form = TripInOrderForm(initial={'order': order})
 
     return render(request, 'create_trips.html', {
         'form': form
