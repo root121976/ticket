@@ -18,6 +18,8 @@ class OrderForm(forms.ModelForm):
 class DateInput(forms.DateInput):
     input_type = 'date'
 
+
+
 class TripInOrderForm(forms.ModelForm):
 
     status = forms.ChoiceField(choices=STATUS_CHOICES, label="", initial='', widget=forms.Select(), required=True)
@@ -27,6 +29,8 @@ class TripInOrderForm(forms.ModelForm):
         exclude = ('updated',)
         widgets = {
             'date_of_trip': DateInput(),
+            'order': forms.HiddenInput()
+
         }
 
     date_of_trip = forms.DateField(widget=DateInput, initial=datetime.date.today)

@@ -18,14 +18,16 @@
           <th>Сотрудник</th>
           <th>Статус</th>
 
-          <th>Comment</th>
+          <th>Время</th>
           <th>-</th>
+
       </tr>
     </thead>
     <tbody>
     {% for order in orders %}
         {% if user == order.user or user.is_staff or user.is_superuser %}
         <tr>|
+            <td><b>{{ order.is_active }}</b></td>
             <td><a href="{% url 'order_detailview' order.pk %}">edit</a></td>
             <td><b>{{ order.id|stringformat:'06d'}}</b></td>
             <td><b>{{ order.created|date:"d/m/Y" }}</b></td>
@@ -61,24 +63,36 @@
         </tr>
           {% for tripinorder in order.tripinorder_set.all %}
               <tr>
+                  <td></td>
                   <td><a href="{% url 'ticket_detailview' tripinorder.pk %}">edit</a></td>
 
               <td>{{ tripinorder.pk|stringformat:'06d' }}</td>
                   <td>{{ tripinorder.date_of_trip|date:"d/m/Y" }}</td>
-            <td>{{ tripinorder.departure}}  -->  {{tripinorder.arrival}}</td>
+            <td>{{ tripinorder.departure}}  -->  {{tripinorder.arrival}} </td>
 
                   {% if tripinorder.status == 1 %}
-            <td><b>новый</b></td>
+            <td>новый</td>
                 {% elif tripinorder.status == 2 %}
-            <td><b>в работе</b></td>
+            <td>в работе</td>
                 {% elif tripinorder.status == 3 %}
-            <td><b>выполнен</b></td>
+            <td>выполнен</td>
                 {% elif tripinorder.status == 4 %}
-            <td><b>отменен</b></td>
+            <td>отменен</td>
             {% endif %}
 
-{#                  <td>{{ tripinorder.time_of_trip }}</td>#}
-            <td></td>
+             {% if tripinorder.time_of_trip == 0 %}
+            <td>Любое время</td>
+                {% elif tripinorder.time_of_trip == 1 %}
+            <td>Ночь (00:00 - 06:00)</td>
+                {% elif tripinorder.time_of_trip == 2 %}
+            <td>Утро (06:00 - 12:00)</td>
+                {% elif tripinorder.time_of_trip == 3 %}
+            <td>День (12:00 - 18:00)</td>
+                 {% elif tripinorder.time_of_trip == 4 %}
+            <td>Вечер(18:00 - 24:00)</td>
+            {% endif %}
+
+
                   <td></td>
             <td>
                 {% if tripinorder.pdf %}

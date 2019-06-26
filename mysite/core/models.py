@@ -77,6 +77,7 @@ class Order(models.Model):
     status =  models.IntegerField(choices=STATUS_CHOICES, default=1)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return "Заказ %s %s" % (self.id, self.status)
@@ -94,7 +95,7 @@ class TripInOrder(models.Model):
 
     order = models.ForeignKey(Order, blank=True, null=False, default=None,on_delete=models.CASCADE)
     date_of_trip = models.DateField(blank=False,null=True, default=None)
-    time_of_trip = models.CharField(max_length=20, blank=True, null=True, default=None)
+    time_of_trip = models.IntegerField(choices=TIME_CHOICES, default=0)
     departure = models.CharField(max_length=50, blank=True, null=True, default=None)
     arrival = models.CharField(max_length=50, blank=True, null=True, default=None)
     ticket_number = models.CharField(max_length=24, blank=True, null=True, default=None)
